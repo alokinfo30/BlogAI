@@ -1,5 +1,5 @@
 # Blog-AI
-Multi-Agent AI Article Writer using CrewAI Framework
+Multi-Agent AI Article Generator using CrewAI Framework
 
 
 blog-ai/
