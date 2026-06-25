@@ -1,0 +1,13 @@
+Flask
+python-dotenv
+crewai
+crewai_tools
+langchain_community
+openai
+gunicorn
+flask-cors
+flask-limiter
+python-json-logger
+markdown
+bleach
+email-validator

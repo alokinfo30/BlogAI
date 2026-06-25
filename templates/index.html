@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Article Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 AI Article Generator</h1>
+            <p class="subtitle">Multi-Agent System for Content Creation</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="topic">Enter Your Topic</label>
+                    <input type="text" 
+                           id="topic" 
+                           placeholder="e.g., Artificial Intelligence, Climate Change, etc."
+                           maxlength="100"
+                           pattern=".{3,100}"
+                           required>
+                    <small>3-100 characters</small>
+                </div>
+                <button id="generateBtn" class="btn-primary">
+                    Generate Article
+                </button>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Our AI Agents are working on your article...</p>
+                <p class="agent-status">🔄 Planning → Writing → Editing</p>
+            </div>
+
+            <div id="result" class="result hidden">
+                <div class="result-header">
+                    <h2>Generated Article</h2>
+                    <button id="copyBtn" class="btn-secondary">📋 Copy</button>
+                </div>
+                <div id="articleContent" class="article-content"></div>
+            </div>
+
+            <div id="error" class="error hidden"></div>
+        </main>
+
+        <footer>
+            <p>Powered by CrewAI Multi-Agent System</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
