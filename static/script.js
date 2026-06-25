@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
         generateBtn.textContent = 'Generating...';
 
         try {
+            console.log('Sending request for topic:', topic);
+            
             const response = await fetch('/api/generate', {
                 method: 'POST',
                 headers: {
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const data = await response.json();
+            console.log('Response received:', data);
 
             if (response.ok && data.status === 'success') {
                 displayArticle(data.article);
@@ -52,8 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError(data.error || 'Failed to generate article');
             }
         } catch (err) {
-            showError('Network error. Please check your connection and try again.');
             console.error('Error:', err);
+            showError('Network error. Please check your connection and try again.');
         } finally {
             loading.classList.add('hidden');
             generateBtn.disabled = false;
@@ -63,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Display article
     function displayArticle(markdown) {
-        // Simple markdown to HTML conversion (you can use a library for better rendering)
+        // Simple markdown to HTML conversion
         let html = markdown
             .replace(/^# (.*$)/gm, '<h1>$1</h1>')
             .replace(/^## (.*$)/gm, '<h2>$1</h2>')

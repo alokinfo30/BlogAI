@@ -1,14 +1,20 @@
 from crewai import Agent
 import os
+import logging
+from app.model_manager import model_manager
+
+logger = logging.getLogger(__name__)
 
 class ArticleAgents:
-    """Define all agents for article generation"""
+    """Define all agents for article generation with multi-model support"""
     
     def __init__(self):
-        self.model_name = os.getenv('OPENAI_MODEL_NAME', 'gpt-3.5-turbo')
-    
+        self.model_manager = model_manager
+        
     def create_planner(self):
-        """Create the content planner agent"""
+        """Create the content planner agent with its own model"""
+        model_config = self.model_manager.get_model_config('planner')
+        
         return Agent(
             role="Content Planner",
             goal="Plan engaging and factually accurate content on {topic}",
@@ -18,11 +24,13 @@ class ArticleAgents:
             Content Writer to write an article on this topic.""",
             allow_delegation=False,
             verbose=True,
-            max_iter=2
+            llm_config=model_config
         )
     
     def create_writer(self):
-        """Create the content writer agent"""
+        """Create the content writer agent with its own model"""
+        model_config = self.model_manager.get_model_config('writer')
+        
         return Agent(
             role="Content Writer",
             goal="Write insightful and factually accurate opinion piece about the topic: {topic}",
@@ -35,11 +43,13 @@ class ArticleAgents:
             to objective statements.""",
             allow_delegation=False,
             verbose=True,
-            max_iter=2
+            llm_config=model_config
         )
     
     def create_editor(self):
-        """Create the editor agent"""
+        """Create the editor agent with its own model"""
+        model_config = self.model_manager.get_model_config('editor')
+        
         return Agent(
             role="Editor",
             goal="Edit a given blog post to align with the writing style of the organization",
@@ -49,5 +59,5 @@ class ArticleAgents:
             controversial topics or opinions when possible.""",
             allow_delegation=False,
             verbose=True,
-            max_iter=2
+            llm_config=model_config
         )

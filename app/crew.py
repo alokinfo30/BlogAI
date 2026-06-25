@@ -1,19 +1,50 @@
 from crewai import Crew
-from app.agents import ArticleAgents
-from app.tasks import ArticleTasks
 import os
+import logging
+from app.model_manager import model_manager
+
+logger = logging.getLogger(__name__)
 
 class ArticleCrew:
-    """Orchestrate the article generation process"""
+    """Orchestrate the article generation process with multi-model support"""
     
     def __init__(self):
-        self.agents = ArticleAgents()
-        self.tasks = ArticleTasks()
-        self.verbose = os.getenv('DEBUG', 'False').lower() == 'true'
+        try:
+            from app.agents import ArticleAgents
+            from app.tasks import ArticleTasks
+            self.agents = ArticleAgents()
+            self.tasks = ArticleTasks()
+            self.verbose = os.getenv('DEBUG', 'False').lower() == 'true'
+            self.model_manager = model_manager
+            
+            logger.info("ArticleCrew initialized with multi-model support")
+            
+            # Test all models on startup
+            self._test_models()
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize ArticleCrew: {str(e)}")
+            raise
+    
+    def _test_models(self):
+        """Test all configured models on startup"""
+        logger.info("Testing all configured models...")
+        results = self.model_manager.test_models()
+        
+        available_count = sum(1 for v in results.values() if v)
+        total_count = len(results)
+        logger.info(f"Models available: {available_count}/{total_count}")
+        
+        if available_count == 0:
+            logger.warning("WARNING: No models are available! Please check your API key and model names.")
+        else:
+            logger.info(f"Available models: {[m for m, v in results.items() if v]}")
     
     def generate_article(self, topic):
         """Generate an article using the crew of agents"""
         try:
+            logger.info(f"Generating article for topic: {topic}")
+            
             # Create agents
             planner = self.agents.create_planner()
             writer = self.agents.create_writer()
@@ -32,8 +63,12 @@ class ArticleCrew:
             )
             
             # Execute tasks
+            logger.info("Starting crew execution with multi-model support...")
             result = crew.kickoff(inputs={"topic": topic})
+            logger.info("Crew execution completed")
+            
             return result
             
         except Exception as e:
-            raise Exception(f"Crew execution failed: {str(e)}")
+            logger.error(f"Crew execution failed: {str(e)}")
+            raise

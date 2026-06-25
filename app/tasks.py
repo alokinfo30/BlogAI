@@ -1,4 +1,7 @@
 from crewai import Task
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ArticleTasks:
     """Define all tasks for article generation"""
