@@ -1,5 +1,5 @@
 # Blog-AI
-Multi-Agent AI Article Generator using CrewAI Framework. #  The multi-agent architecture ensures high-quality article generation while maintaining security best practices.
+Multi-Agent AI Article Generator using CrewAI Framework. #  The multi-agent architecture ensures high-quality article generation while maintaining security best practices handle synchronous task
 
 
 
